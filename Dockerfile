@@ -14,14 +14,19 @@ RUN ggID='1SsMQsIq_EhAbofKECYXkiKzSM0D63YE-' \
 && getcode="$(awk '/_warning_/ {print $NF}' /tmp/gcokie)" \
 && curl -Lb /tmp/gcokie "${ggURL}&confirm=${getcode}&id=${ggID}" -o "/tmp/${filename}"
 
+RUN mkdir -p /UOLocation && mkdir -p /ultimaphp
+
 VOLUME [ "/UOLocation" ]
 
 RUN unzip -o /tmp/Muls.zip -d /UOLocation
 RUN rm -rf /tmp/Muls.zip
 
-VOLUME [ "/UltimaPHP" ]
+VOLUME [ "/ultimaphp" ]
 
-RUN git clone https://github.com/UltimaPHP/UltimaPHP.git
+
+WORKDIR /ultimaphp
+
+RUN git clone https://github.com/UltimaPHP/UltimaPHP.git /ultimaphp
 
 EXPOSE 2593
 COPY entrypoint.sh ./entrypoint.sh
